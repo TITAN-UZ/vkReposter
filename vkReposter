@@ -1,0 +1,50 @@
+# -*- coding: utf-8 -*-
+#vkReposter author Sergey Kurbanov
+
+#Lib 
+import requests
+import json
+import time
+
+#С какой цифры стартанет инкремент заметок
+i = 0
+
+
+#Функиция ищет розыгрыш призов
+def requestNewCompetition():
+	r = requests.get('https://api.vk.com/method/newsfeed.search?q=Конкурс репост подарки&count=2&access_token=e9fcf2fca062460dc15c36249bc39974ddcf0c960bd644eb89de6e51a76d364f8cf6de3a3c3f2fee3f4b9')
+	return r.text.encode('utf-8')
+
+#Парсинг входящих данных
+def parsCompetition(i):
+	text = requestNewCompetition()
+	jsontext = json.loads(text)
+	ownerid = jsontext['response'][1]['owner_id']
+	postid = jsontext['response'][1]['id']
+	#repost(ownerid, postid)
+	checkPosts(ownerid,postid, i)
+
+#Проверка уникальности поста
+def checkPosts(ownerid,postid, i):
+	f = open('check.txt','r+b')
+	s = str(ownerid)+'_'+str(postid)
+	print s
+	find = f.read()
+	if s in find:
+		if s != '':
+			print 'bad'
+	else:
+		f.write(s+'\r\n')
+		repost(ownerid,postid, i)
+		print 'good'
+#Репостим
+def repost(ownerid, postid, i):
+	print ownerid, postid
+	getRequestString ='https://api.vk.com/method/wall.repost?object=wall'+str(ownerid)+'_'+str(postid)+'&message='+str(i)+'&access_token=e9fcf2fca062460dc15c36249bc39974ddcf0c960bd644eb89de6e51a76d364f8cf6de3a3c3f2fee3f4b9'
+	r = requests.get(getRequestString)
+
+
+while True:
+	i = i+1
+	v = parsCompetition(i)
+	time.sleep(300)
