@@ -12,7 +12,7 @@ i = 0
 
 #Функиция ищет розыгрыш призов
 def requestNewCompetition():
-	r = requests.get('https://api.vk.com/method/newsfeed.search?q=Конкурс репост подарки&count=2&access_token=e9fcf2fca062460dc15c36249bc39974ddcf0c960bd644eb89de6e51a76d364f8cf6de3a3c3f2fee3f4b9')
+	r = requests.get('https://api.vk.com/method/newsfeed.search?q=Конкурс репост подарки&count=2&access_token=')
 	return r.text.encode('utf-8')
 
 #Парсинг входящих данных
@@ -40,7 +40,7 @@ def checkPosts(ownerid,postid, i):
 #Репостим
 def repost(ownerid, postid, i):
 	print ownerid, postid
-	getRequestString ='https://api.vk.com/method/wall.repost?object=wall'+str(ownerid)+'_'+str(postid)+'&message='+str(i)+'&access_token=e9fcf2fca062460dc15c36249bc39974ddcf0c960bd644eb89de6e51a76d364f8cf6de3a3c3f2fee3f4b9'
+	getRequestString ='https://api.vk.com/method/wall.repost?object=wall'+str(ownerid)+'_'+str(postid)+'&message='+str(i)+'&access_token='
 	r = requests.get(getRequestString)
 
 
